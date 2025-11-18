@@ -24,7 +24,6 @@ in th_results is copied from the original in EEMBC.
 #include <cstring>
 
 #include "third_party/mlperf_tiny/api/internally_implemented.h"
-#include "third_party/mlperf_tiny/util/quantization_helpers.h"
 #include <stdio.h>
 
 #include "../../wav2letter/model/wav2letter_pruned_int8.h" 
@@ -33,10 +32,8 @@ in th_results is copied from the original in EEMBC.
 #include "../../tflite.h"
 #include "../../perf.h"
 
-// Set correct input size (1 * 296 * 39)
 const int kInputSize = 11544;
 
-// Implement this method to prepare for inference and preprocess inputs.
 void th_load_tensor() {
   uint8_t input_quantized[kInputSize];
 
@@ -51,7 +48,6 @@ void th_load_tensor() {
   tflite_set_input(reinterpret_cast<int8_t*>(input_quantized));
 }
 
-// Add to this method to return real inference results.
 void th_results() {
 
   const int nresults = 4292;
@@ -72,14 +68,11 @@ void th_results() {
   th_printf("]\r\n");
 }
 
-// Implement this method with the logic to perform one inference cycle.
 void th_infer() { tflite_classify(); }
 
 /// \brief optional API.
 void th_final_initialize(void) {
-  // <<< MODIFIED: Load the correct Wav2letter model
-  // (Assuming variable names from the header file name)
-  tflite_load_model(wav2letter_pruned_int8, wav2letter_pruned_int8_len);
+  tflite_load_model(wav2letter_pruned_int8_tflite, wav2letter_pruned_int8_tflite_len);
 }
 void th_pre() {}
 void th_post() {}
