@@ -4,7 +4,3 @@ build/
 *.tflite
 
 src/wav2letter/model/wav2letter_pruned_int8.h
-
-cfu.v
-
-/src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h

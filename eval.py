@@ -172,9 +172,9 @@ if __name__ == '__main__':
                     print("\nError: Read timed out during inference!")
                     msg = msg_buffer_bytes.decode('utf-8', 'ignore')
                     break
-                if byte_char == b'.':
-                    print(byte_char.decode('utf-8', 'ignore'), end='', flush=True)
-                    
+                # if byte_char == b'.':
+                #     print(byte_char.decode('utf-8', 'ignore'), end='', flush=True)
+                print(byte_char.decode('utf-8', 'ignore'), end='', flush=True)
                 msg_buffer_bytes += byte_char
                 if msg_buffer_bytes.endswith(READY_MSG.encode()):
                     msg = msg_buffer_bytes.decode('utf-8', 'ignore')

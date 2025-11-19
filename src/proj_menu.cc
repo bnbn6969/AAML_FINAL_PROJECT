@@ -20,28 +20,24 @@
  
  #include "cfu.h"
  #include "menu.h"
- #include "wav2letter/wav2letter.h" // Your existing include for 'w'
+ #include "wav2letter/wav2letter.h"
  
- // <<< MODIFIED: Add MLPerf includes >>>
  #include "third_party/mlperf_tiny/api/internally_implemented.h"
  #include "third_party/mlperf_tiny/api/submitter_implemented.h"
  
  namespace {
  
- // <<< MODIFIED: Add this function >>>
- // This function enters the MLPerf benchmark mode and never returns.
+
  void do_enter_mlperf_tiny(void){
-   // Initialize the benchmark harness
    ee_benchmark_initialize(); 
    th_getchar();
-   // This is the forever-loop that processes serial commands
    while (1) {
      int c;
-     c = th_getchar(); // Get char from serial
+     c = th_getchar(); 
      #ifndef MLPERF_TINY_NO_ECHO
-       putchar(c); // Echo back if not disabled
+       putchar(c); 
      #endif
-     ee_serial_callback(c); // Feed the char to the MLPerf parser
+     ee_serial_callback(c); 
    }
  }
  
@@ -49,13 +45,9 @@
      "Project Menu",
      "project",
      {
-         // Your existing menu item for human-testing
          MENU_ITEM('w', "Wav2letter Tests", wav2letter_pruned_menu),
  
-         // <<< MODIFIED: Add this new menu item >>>
-         // 'b' for "benchmark"
          MENU_ITEM('b', "Enter MLPerf Tiny Benchmark Interface", do_enter_mlperf_tiny),
-         
          MENU_END,
      },
  };
