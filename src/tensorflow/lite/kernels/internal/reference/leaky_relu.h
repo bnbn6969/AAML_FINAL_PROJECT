@@ -19,6 +19,7 @@ limitations under the License.
 #include <limits>
 
 #include "tensorflow/lite/kernels/internal/common.h"
+#include "perf.h"
 
 namespace tflite {
 namespace reference_ops {
@@ -26,12 +27,16 @@ namespace reference_ops {
 inline void LeakyRelu(const tflite::LeakyReluParams& params,
                       const RuntimeShape& input_shape, const float* input_data,
                       const RuntimeShape& output_shape, float* output_data) {
+  perf_enable_counter(4);
+  	
   const int flat_size = MatchingFlatSize(input_shape, output_shape);
+  printf("leaky_relu size= %d ", flat_size);
   for (int i = 0; i < flat_size; ++i) {
     const float val = input_data[i];
     // Note that alpha might be > 1 or < 0, so we don't use std::max here.
     output_data[i] = val > 0 ? val : val * params.alpha;
   }
+  perf_disable_counter(4);
 }
 
 template <typename T>
@@ -40,7 +45,9 @@ inline void QuantizeLeakyRelu(const LeakyReluParams& params,
                               const T* input_data,
                               const RuntimeShape& output_shape,
                               T* output_data) {
+  perf_enable_counter(5);
   const int flat_size = MatchingFlatSize(input_shape, output_shape);
+  //printf("leaky_relu_quantize size= %d ", flat_size);
   static const int32_t quantized_min = std::numeric_limits<T>::min();
   static const int32_t quantized_max = std::numeric_limits<T>::max();
   for (int i = 0; i < flat_size; ++i) {
@@ -61,9 +68,11 @@ inline void QuantizeLeakyRelu(const LeakyReluParams& params,
         std::min(quantized_max, std::max(quantized_min, unclamped_output));
     output_data[i] = static_cast<T>(clamped_output);
   }
+  perf_disable_counter(5);
 }
 
 }  // namespace reference_ops
+
 }  // namespace tflite
 
 #endif  // TENSORFLOW_LITE_KERNELS_INTERNAL_REFERENCE_LEAKY_RELU_H_
