@@ -2,5 +2,8 @@
 build/
 
 *.tflite
-
+.venv/
+venv/
+__pycache__/
+*.pyc
 src/wav2letter/model/wav2letter_pruned_int8.h
